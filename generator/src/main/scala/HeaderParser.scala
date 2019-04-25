@@ -31,7 +31,7 @@ object HeaderParser extends RegexParsers {
   def arguments: Parser[List[Argument]] = rep1sep(argument, ",")
   def argument: Parser[Argument] = ident ~ opt("*") ^^ {
     case typeName ~ Some(_) => Argument(typeName + " *")
-    case typeName ~ None    => Argument(typeName)
+    case typeName ~ None => Argument(typeName)
   }
   def ident: Parser[String] = "\\w+".r
 
