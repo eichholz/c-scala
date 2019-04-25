@@ -46,12 +46,13 @@ def generateNative(classpath: Seq[Attributed[File]], baseDir: File, classDir: Fi
     val glibLibs = Process("pkg-config --cflags glib-2.0 --libs glib-2.0", Some(jnisrcDir)) !! processLogger
     //    val jniLibs = "-I /System/Library/Frameworks/JavaVM.framework/Versions/Current/Headers -I /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers "
     val jniLibs = "-I /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.201.b09-6.fc29.x86_64/include -I /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.201.b09-6.fc29.x86_64/include/linux"
+//    val jniLibs = "-I /usr/lib/jvm/java-8-openjdk-amd64/include -I /usr/lib/jvm/java-8-openjdk-amd64/include/linux"
     stream.log.info("Compiling C code...")
-    if (Process(s"clang $glibLibs $jniLibs -Wreturn-type -c ${files.mkString(" ")}", Some(jnisrcDir)) ! processLogger != 0) throw new Incomplete(None)
+    if (Process(s"gcc -c $glibLibs $jniLibs -c -fPIC ${files.mkString(" ")}", Some(jnisrcDir)) ! processLogger != 0) throw new Incomplete(None)
     stream.log.info("Creating object files...")
-    if (Process(s"clang $glibLibs -dynamiclib -o libshallow.jnilib Native.o CLangNative.o", Some(jnisrcDir)) ! processLogger != 0) throw new Incomplete(None)
+    if (Process(s"gcc $glibLibs -shared -o libshallow.so Native.o CLangNative.o", Some(jnisrcDir)) ! processLogger != 0) throw new Incomplete(None)
     IO.delete(List(jnisrcDir / "Native.o", jnisrcDir / "Native.h.gch", jnisrcDir / "Native.c", jnisrcDir / "CLangNative.h.gch", jnisrcDir / "CLangNative.o"))
-    IO.move(jnisrcDir / "libshallow.jnilib", nativeLibrary)
+    IO.move(jnisrcDir / "libshallow.so", nativeLibrary)
   }
 }
 
