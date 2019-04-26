@@ -2,10 +2,10 @@ package ch.epfl.data
 package cscala
 package test
 
-import org.scalatest.{ FlatSpec, ShouldMatchers }
+import org.scalatest.{ FlatSpec, Matchers }
 import collections._
 
-class CArrayBufferTest extends FlatSpec with ShouldMatchers {
+class CArrayBufferTest extends FlatSpec with Matchers {
   System.loadLibrary("shallow")
 
   import CLangTypes._

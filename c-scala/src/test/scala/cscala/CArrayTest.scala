@@ -1,10 +1,10 @@
 package ch.epfl.data
 package cscala
 
-import org.scalatest.{ FlatSpec, ShouldMatchers }
+import org.scalatest.{ FlatSpec, Matchers }
 import collections._
 
-class CArrayTest extends FlatSpec with ShouldMatchers {
+class CArrayTest extends FlatSpec with Matchers {
   System.loadLibrary("shallow")
 
   "CArray" should "create Arrays of Ints" in {

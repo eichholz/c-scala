@@ -3,10 +3,9 @@ package cscala
 package test
 
 import java.io.{ File, FileOutputStream, PrintStream }
+
 import collection.JavaConverters._
-
-import org.scalatest.{ FlatSpec, ShouldMatchers }
-
+import org.scalatest.{ FlatSpec, Matchers }
 import CLang._
 import CLangTypes._
 import CStdLib._
@@ -14,7 +13,7 @@ import CStdIO._
 import CString._
 import CSysTime._
 
-class CLangTest extends FlatSpec with ShouldMatchers {
+class CLangTest extends FlatSpec with Matchers {
   System.loadLibrary("shallow")
 
   "Shallow C" should "get and dereference pointers with & and *" in {

@@ -3,10 +3,9 @@ package cscala
 package test
 
 import java.io.{ File, FileOutputStream, PrintStream }
+
 import collection.JavaConverters._
-
-import org.scalatest.{ FlatSpec, ShouldMatchers }
-
+import org.scalatest.{ FlatSpec, Matchers }
 import CLang._
 import CLangTypes._
 import CStdLib._
@@ -19,7 +18,7 @@ import GHashTableHeader._
 import GArrayHeader._
 import GTreeHeader._
 
-class GLibTest extends FlatSpec with ShouldMatchers {
+class GLibTest extends FlatSpec with Matchers {
   System.loadLibrary("shallow")
 
   "Shallow GHashTable" should "perform hash table insert and size" in {
