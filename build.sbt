@@ -24,7 +24,7 @@ def generateNative(classpath: Seq[Attributed[File]], baseDir: File, classDir: Fi
   val additionalFiles = Seq(jnisrcDir / "CLangNative.h", jnisrcDir / "CLangNative.c")
   val additionalMod = additionalFiles.map(_.lastModified).max
   val headerFile = jnisrcDir / "Native.h"
-  val nativeLibrary = baseDir / "libshallow.jnilib"
+  val nativeLibrary = baseDir / "libshallow.so"
   val oldHeaders = if (headerFile.exists) IO.read(headerFile) else ""
   // Generate headers for the native methods
   if (Process(s"javah -jni -o $headerFile ch.epfl.data.cscala.Native$$", Some(classDir)) ! processLogger != 0) throw new Incomplete(None)
@@ -73,7 +73,8 @@ def formattingPreferences = {
     .setPreference(AlignSingleLineCaseStatements, true)
 }
 
-lazy val formatSettings = SbtScalariform.scalariformSettings ++ Seq(
+lazy val formatSettings = Seq(
+  ScalariformKeys.autoformat := true,
   ScalariformKeys.preferences in Compile := formattingPreferences,
   ScalariformKeys.preferences in Test := formattingPreferences
 )
@@ -86,6 +87,7 @@ lazy val cScala = (project in file("c-scala"))
   .settings(defaults)
   .settings(Seq(
     fork in Test := true,
+    javaOptions in Test += s"-Djava.library.path=${baseDirectory.value}",
     compile in Compile := {
       generateNative((dependencyClasspath in Compile).value, baseDirectory.value, (classDirectory in Compile).value, streams.value)
       (compile in Compile).value
